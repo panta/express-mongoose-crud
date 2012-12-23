@@ -1,0 +1,60 @@
+{   "name": "express-mongoose-crud"
+  , "description": "Express library to create REST APIs and/or CRUD interfaces"
+  , "version": "0.0.1"
+  , "homepage": "https://github.com/panta/express-mongoose-crud"
+  , "author": {
+    "name": "Marco Pantaleoni",
+    "email": "marco.pantaleoni@gmail.com",
+    "url":  "https://github.com/panta"
+  }
+  , "dependencies": {
+      "mongoose": ">= 3.0.3"
+    , "mkdirp": ">= 0.3.4"
+  }
+  , "devDependencies": {
+      "coffee-script": ">= 1.3.3"
+    , "express": "2.5.9"
+    , "muffin": ">= 0.6.2"
+    , "glob": ">= 3.0.1"
+    , "mocha": ">= 1.4.2"
+    , "chai": ">= 1.2.0"
+  }
+  , "repository": {
+      "type": "git"
+    , "url": "git://github.com/panta/express-mongoose-crud.git"
+  }
+  , "bugs": {
+    "url" : "https://github.com/panta/express-mongoose-crud/issues"
+  }
+  , "licenses": [{ 
+      "type": "MIT", 
+      "url": "https://raw.github.com/panta/express-mongoose-crud/master/LICENSE"
+    }]
+  , "directories" : {
+      "lib" : "./lib"
+    , "test" : "./test"
+  }
+  , "scripts": {
+      "watch": "coffee -c -w  -o lib src"
+    , "prepublish": "cake build"
+    , "test": "NODE_ENV=test node_modules/.bin/mocha --compilers coffee:coffee-script --timeout 10000 -R spec test/*.coffee"
+    , "posttest": "rm -rf test/uploads"
+  }
+  , "main": "lib/index.js"
+  , "engines": {
+      "node": ">= 0.8.0"
+    , "npm": ">= 1.0.0"
+  }
+  , "keywords": [
+      "express"
+    , "mongoose"
+    , "REST"
+    , "API"
+    , "CRUD"
+    , "resource"
+    , "restful"
+    , "library"
+    , "plugin"
+    , "plugins"
+  ]
+}
