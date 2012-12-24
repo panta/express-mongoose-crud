@@ -80,7 +80,7 @@ class Resource
     defaultFormat: 'json'
     actions: {}
     addLinks: true
-    trace: true
+    trace: false
   _DEFAULT_OPTION_ACTIONS:
       index: {}
       create: {}
@@ -140,7 +140,7 @@ class Resource
     @traceAction(req, 'index', "#{@_mount_info.url_prefix} format:#{format}")
     q = @_build_query(req)
     q.exec (err, items) =>
-      return res.json(500, { error: "#{err}" })  if err
+      return res.send(500, { error: "#{err}" })  if err
       objs = items.map (item) => @instance2json(item)
       res.json(objs)
 
@@ -149,10 +149,12 @@ class Resource
     @traceAction(req, 'show', "#{@_mount_info.url_prefix}:#{@idParam} format:#{format}")
     id = req.params[@idParam]
     @findOne req, id, (err, item) =>
-      console.log("find returned err:", err, "  item:", item)
-      return res.json(500, { error: "#{err}", id: id })  if err
+      # console.log("find returned err:", err, "  item:", item)
+      return res.send(500, { error: "#{err}", id: id })  if err
+      # return res.json(500, { error: "#{err}", id: id })  if err
       if item is null
-        return res.json(404, { error: "Resource not found", id: id })
+        return res.send(404, { error: "Resource not found", id: id })
+        # return res.json(404, { error: "Resource not found", id: id })
       obj = @instance2json(item)
       res.json(obj)
 
@@ -177,8 +179,8 @@ class Resource
         if (not related.idParam of item) or (not item[related.idParam])
           item[related.idParam] = related_id
     item.save (err) =>
-      return res.json(500, { error: "#{err}", id: id })  if err
-      console.log("created #{@name} with id:#{item.id}")
+      return res.send(500, { error: "#{err}", id: id })  if err
+      #console.log("created #{@name} with id:#{item.id}")
       if (req.body._format? and req.body._format == 'html') or (format == 'html')
         return res.redirect @_mount_info.url_prefix + "/#{item.id}" + ".html"
       else
@@ -190,13 +192,14 @@ class Resource
     @traceAction(req, 'delete', "#{@_mount_info.url_prefix}:#{@idParam} format:#{format}")
     id = req.params[@idParam]
     @findOne req, id, (err, item) =>
-      console.log("find returned err:", err, "  item:", item)
-      return res.json(500, { error: "#{err}", id: id })  if err
+      #console.log("find returned err:", err, "  item:", item)
+      return res.send(500, { error: "#{err}", id: id })  if err
       if item is null
-        return res.json(404, { error: "Resource not found", id: id })
+        return res.send(404, { error: "Resource not found", id: id })
+        # return res.json(404, { error: "Resource not found", id: id })
       return item.remove (err) =>
-        return res.json(500, { error: "#{err}", id: id })  if err
-        console.log("removed #{@name} with id:#{id}")
+        return res.send(500, { error: "#{err}", id: id })  if err
+        #console.log("removed #{@name} with id:#{id}")
         return res.json(200, { message: 'Ok' })
 
   findOne: (req, id, cb) ->
