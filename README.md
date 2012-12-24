@@ -16,6 +16,8 @@ The following features are supported:
 *  custom action
 *  redirection support
 
+**NOTE:** The library is under development, not all the above features are complete or available.
+
 ## Install
 
 npm install express-mongoose-crud
