@@ -135,6 +135,17 @@ describe 'WHEN working with the library', ->
           update_author author, defer()
       done()
 
+    it 'should return 404 for non-existing id values', (done) ->
+      request(app)
+        .put("/api/v1/authors/012345678901234567890123")
+        .send({ name: 'UPDATED', birth_date: new Date(2100, 0, 1) })
+        .set('Accept', 'application/json')
+        .expect(404)
+        .end (err, res) ->
+          throw (err)  if (err)
+          should.equal res.statusCode, 404
+          done()
+
   describe 'GET /api/v1/books', ->
     it 'should return the correct number of records', (done) =>
       request(app)
