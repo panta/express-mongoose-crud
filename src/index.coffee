@@ -138,13 +138,17 @@ class Resource
         delete obj[field]
     obj
 
+  instances2json: (items) ->
+    objs = items.map (item) => @instance2json(item)
+    objs
+
   action_index: (req, res) ->
     format = req.format or @options.defaultFormat
     @traceAction(req, 'index', "#{@_mount_info.url_prefix} format:#{format}")
     q = @_build_query(req)
     q.exec (err, items) =>
       return res.send(500, { error: "#{err}" })  if err
-      objs = items.map (item) => @instance2json(item)
+      objs = @instances2json(items)
       res.json(objs)
 
   action_show: (req, res) ->
