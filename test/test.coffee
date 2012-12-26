@@ -113,6 +113,28 @@ describe 'WHEN working with the library', ->
           should.exist res.body.href
           done()
 
+  describe 'PUT /api/v1/authors/:authorId', ->
+    it 'should update an existing record', (done) =>
+      update_author = (author, cb) ->
+        request(app)
+          .put("/api/v1/authors/#{author.id}")
+          .send({ name: 'UPDATED', birth_date: new Date(2100, 0, 1) })
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .end (err, res) ->
+            throw (err)  if (err)
+            should.equal res.statusCode, 200
+            should.equal res.body.id, author.id
+            should.equal res.body.name, 'UPDATED'
+            should.not.exist res.body.birth_date
+            should.exist res.body.href
+            cb()
+      await
+        for author in fixtures.authors
+          update_author author, defer()
+      done()
+
   describe 'GET /api/v1/books', ->
     it 'should return the correct number of records', (done) =>
       request(app)
