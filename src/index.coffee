@@ -165,6 +165,27 @@ class Resource
       obj = @instance2json(item)
       res.json(obj)
 
+  action_update: (req, res) ->
+    format = req.format or @options.defaultFormat
+    @traceAction(req, 'update', "#{@_mount_info.url_prefix}:#{@idParam} format:#{format}")
+    id = req.params[@idParam]
+    @findOne req, id, (err, item) =>
+      # console.log("find returned err:", err, "  item:", item)
+      return res.send(500, { error: "#{err}", id: id })  if err
+      # return res.json(500, { error: "#{err}", id: id })  if err
+      if item is null
+        return res.send(404, { error: "Resource not found", id: id })
+        # return res.json(404, { error: "Resource not found", id: id })
+      @_update_instance_from_body_values(req, item)
+      item.save (err) =>
+        return res.send(500, { error: "#{err}" })  if err
+        #console.log("created #{@name} with id:#{item.id}")
+        if (req.body._format? and req.body._format == 'html') or (format == 'html')
+          return res.redirect @_mount_info.url_prefix + "/#{item.id}" + ".html"
+        else
+          obj = @instance2json(item)
+          return res.json(obj)
+
   action_create: (req, res) ->
     format = req.format or @options.defaultFormat
     @traceAction(req, 'create', "#{@_mount_info.url_prefix} format:#{format}")
@@ -285,6 +306,9 @@ class Resource
 
     middleware = @options.middleware?.show or []
     app.get @_mount_info.url_prefix + "/:#{@idParam}.:format?", middleware, bind(@action_show, @)
+
+    middleware = @options.middleware?.update or []
+    app.put @_mount_info.url_prefix + "/:#{@idParam}.:format?", middleware, bind(@action_update, @)
 
     middleware = @options.middleware?.delete or []
     app.delete @_mount_info.url_prefix + "/:#{@idParam}", middleware, bind(@action_delete, @)
