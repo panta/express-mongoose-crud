@@ -179,7 +179,7 @@ class Resource
         if (not related.idParam of item) or (not item[related.idParam])
           item[related.idParam] = related_id
     item.save (err) =>
-      return res.send(500, { error: "#{err}", id: id })  if err
+      return res.send(500, { error: "#{err}" })  if err
       #console.log("created #{@name} with id:#{item.id}")
       if (req.body._format? and req.body._format == 'html') or (format == 'html')
         return res.redirect @_mount_info.url_prefix + "/#{item.id}" + ".html"
