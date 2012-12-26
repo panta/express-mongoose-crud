@@ -82,15 +82,15 @@ class Resource
     addLinks: true
     trace: false
   _DEFAULT_OPTION_ACTIONS:
-      index: {}
-      create: {}
-      delete_all: {}
-      show: {}
-      update: {}
-      'delete': {}
-      transition: {}
-      'new': {}
-      edit: {}
+    index: {}
+    create: {}
+    delete_all: {}
+    show: {}
+    update: {}
+    'delete': {}
+    transition: {}
+    'new': {}
+    edit: {}
   _DEFAULT_ACTION_OPTS:
     url: null
     middleware: null
