@@ -133,6 +133,9 @@ class Resource
     obj = item.toObject(getters: @options.getters)
     if @options.addLinks
       obj['href'] = @_mount_info.url_prefix + "/#{item.id}"
+    for field in @options.exclude
+      if field of obj
+        delete obj[field]
     obj
 
   action_index: (req, res) ->
