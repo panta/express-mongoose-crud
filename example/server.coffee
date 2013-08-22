@@ -5,6 +5,7 @@ express = require('express')
 http = require('http')
 mongoose = require('mongoose')
 express_mongoose_crud = require('../src/index')
+fixtures = require('pow-mongoose-fixtures')
 
 path = require('path')
 
@@ -41,41 +42,8 @@ app.configure "test", ->
     showStack: true
   )
 
-get_or_create_model = (model, search_field, data, cb) ->
-  search_criteria = {}
-  search_criteria[search_field] = data[search_field]
-  model.findOne search_criteria, (err, item) ->
-    throw err  if err
-    if item
-      cb(item)
-    else
-      model.create data, (err, item) ->
-        throw err  if (err)
-        cb(item)
-
-get_or_create_model models.Author, 'name', {
-  name: "Giacomo Leopardi"
-  birth_date: new Date(1798, 5, 29)
-}, (author) ->
-  get_or_create_model models.Book, 'title', { title: "Zibaldone", author: author }, (book) ->
-    get_or_create_model models.Review, 'title', {
-      title: "Zibaldone: first impressions"
-      book: book
-      text: "It was a dark and stormy night"
-    }, (review) ->
-      review
-
-get_or_create_model models.Author, 'name', {
-  name: "Alessandro Manzoni"
-  birth_date: new Date(1785, 2, 7)
-}, (author) ->
-  get_or_create_model models.Book, 'title', { title: "I Promessi Sposi", author: author }, (book) ->
-    get_or_create_model models.Review, 'title', {
-      title: "About 'I Promessi Sposi'"
-      book: book
-      text: "The quick brown fox..."
-    }, (review) ->
-      review
+# populate the DB using fixtures
+fixtures.load __dirname + '/fixtures', db
 
 r_author = new express_mongoose_crud.Resource
   model: models.Author

@@ -20,6 +20,7 @@
     , "mocha": ">= 1.12.x"
     , "chai": ">= 1.7.x"
     , "supertest": ">= 0.7.x"
+    , "pow-mongoose-fixtures": "0.3.x"
   }
   , "repository": {
       "type": "git"
