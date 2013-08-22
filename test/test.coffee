@@ -146,6 +146,19 @@ describe 'WHEN working with the library', ->
           should.equal res.statusCode, 404
           done()
 
+    # it 'should give an error when excluded fields are specified', (done) =>
+    #   author = fixtures.authors[0]
+    #   console.log("author id:'#{author.id}'")
+    #   request(app)
+    #     .put("/api/v1/authors/#{author.id}")
+    #     .send({ birth_date: 5 })
+    #     .set('Accept', 'application/json')
+    #     .expect(500)
+    #     .end (err, res) =>
+    #       throw (err)  if (err)
+    #       should.equal res.statusCode, 500
+    #       done()
+
   describe 'GET /api/v1/books', ->
     it 'should return the correct number of records', (done) =>
       request(app)
