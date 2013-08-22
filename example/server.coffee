@@ -2,6 +2,7 @@
 
 coffee = require('coffee-script')
 express = require('express')
+http = require('http')
 mongoose = require('mongoose')
 express_mongoose_crud = require('../src/index')
 
@@ -11,11 +12,10 @@ models = require('./models')
 
 db = mongoose.connect("mongodb://localhost/express_mongoose_crud_example")
 
-app = module.exports = express.createServer()
+app = module.exports = express()
 app.configure ->
   app.set "views", path.join(__dirname, "/views")
   app.set "view engine", "jade"
-  app.set "view options", { layout: false }
   app.use express.logger()
   app.use express.bodyParser()
   app.use express.methodOverride()
@@ -94,5 +94,6 @@ r_review = new express_mongoose_crud.Resource
 r_review.mount(r_book, { relation: 'book' })
 
 if process.env.NODE_ENV != 'test'
-  app.listen 8080, "127.0.0.1", ->
-    console.log "Express server listening on %d in %s mode", app.address().port, app.settings.env
+  server = http.createServer(app)
+  server.listen 8080, "127.0.0.1", 511, ->
+    console.log "Express server listening on %d in %s mode", server.address().port, app.settings.env
