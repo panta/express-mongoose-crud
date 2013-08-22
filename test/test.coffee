@@ -3,13 +3,14 @@ assert = chai.assert
 expect = chai.expect
 should = chai.should()
 express = require('express')
+http = require('http')
 request = require('supertest')
 
 fixtures = require('./fixtures')
 
 express_mongoose_crud = require('../src/index.coffee')
 
-app = express.createServer()
+app = express()
 app.configure ->
   app.use express.bodyParser()
   app.use express.methodOverride()
