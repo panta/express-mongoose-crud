@@ -323,6 +323,19 @@ class Resource
       prefix = @_prefix
     prefix
 
+  _included_field: (fieldName) ->
+    included = true
+    if (fieldName in @options.exclude)
+      included = false
+    if (fieldName in @options.fields)
+      included = true
+    f = []
+    @model.schema.eachPath (pathname) =>
+      f.push pathname
+    if not (fieldName in f)
+      included = false
+    included
+
   _update_instance_from_body_values: (req, instance) ->
     @model.schema.eachPath (pathname) =>
       path = @model.schema.path(pathname)
