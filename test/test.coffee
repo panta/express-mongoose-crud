@@ -4,11 +4,15 @@ expect = chai.expect
 should = chai.should()
 express = require('express')
 http = require('http')
+mongoose = require('mongoose')
+express_mongoose_crud = require('../src/index.coffee')
+fixtures_loader = require('pow-mongoose-fixtures')
 request = require('supertest')
 
-fixtures = require('./fixtures')
+models = require('./fixtures/models')
+fixtures = require('./fixtures/fixtures')
 
-express_mongoose_crud = require('../src/index.coffee')
+db = mongoose.connect('mongodb://localhost:27017/express_mongoose_crud_tests')
 
 app = express()
 app.configure ->
@@ -20,22 +24,28 @@ app.configure ->
 app.enable("jsonp callback")
 
 r_author = new express_mongoose_crud.Resource
-  model: fixtures.Author
+  model: models.Author
   exclude: ['birth_date']
 r_author.mount(app)
 
 r_book = new express_mongoose_crud.Resource
-  model: fixtures.Book
+  model: models.Book
 r_book.mount(app)
 
 r_review = new express_mongoose_crud.Resource
-  model: fixtures.Review
+  model: models.Review
 r_review.mount(r_book, { relation: 'book' })
 
-describe 'WHEN working with the library', ->
-  beforeEach(fixtures.before)
+load_fixtures = (done) ->
+  # populate the test DB using fixtures
+  fixtures_loader.load fixtures.by_model, db, (err) ->
+    throw (err) if (err)
+    done()
 
-  afterEach(fixtures.after)
+describe 'WHEN working with the library', ->
+  beforeEach(load_fixtures)
+
+  #afterEach(fixtures.after)
 
   describe 'library', ->
     it 'should exist', (done) ->
