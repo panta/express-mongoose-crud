@@ -143,7 +143,7 @@ class Resource
     objs
 
   action_index: (req, res) ->
-    format = req.format or @options.defaultFormat
+    format = req.query.format or @options.defaultFormat
     @traceAction(req, 'index', "#{@_mount_info.url_prefix} format:#{format}")
     q = @_build_query(req)
     q.exec (err, items) =>
@@ -152,7 +152,7 @@ class Resource
       res.json(objs)
 
   action_show: (req, res) ->
-    format = req.format or @options.defaultFormat
+    format = req.query.format or @options.defaultFormat
     @traceAction(req, 'show', "#{@_mount_info.url_prefix}:#{@idParam} format:#{format}")
     id = req.params[@idParam]
     @findOne req, id, (err, item) =>
@@ -166,7 +166,7 @@ class Resource
       res.json(obj)
 
   action_update: (req, res) ->
-    format = req.format or @options.defaultFormat
+    format = req.query.format or @options.defaultFormat
     @traceAction(req, 'update', "#{@_mount_info.url_prefix}:#{@idParam} format:#{format}")
     id = req.params[@idParam]
     @findOne req, id, (err, item) =>
@@ -187,7 +187,7 @@ class Resource
           return res.json(obj)
 
   action_create: (req, res) ->
-    format = req.format or @options.defaultFormat
+    format = req.query.format or @options.defaultFormat
     @traceAction(req, 'create', "#{@_mount_info.url_prefix} format:#{format}")
     # #console.log(req.body)
     # console.log("REQUEST files:")
@@ -216,7 +216,7 @@ class Resource
         return res.json(obj)
 
   action_delete: (req, res) ->
-    format = req.format or @options.defaultFormat
+    format = req.query.format or @options.defaultFormat
     @traceAction(req, 'delete', "#{@_mount_info.url_prefix}:#{@idParam} format:#{format}")
     id = req.params[@idParam]
     @findOne req, id, (err, item) =>
